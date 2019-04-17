@@ -1,3 +1,5 @@
+using Iot.Device.DHTxx;
+
 namespace PIServer.Service
 {
     public interface IDHT11Service
@@ -9,18 +11,21 @@ namespace PIServer.Service
     {
         public DHT11Result CurrentStatus()
         {
-            return new DHT11Result
+            using (DHTSensor dht = new DHTSensor(2, DhtType.Dht11))
             {
-                temperature = 1,
-                humidity = 1
-            };
+                return new DHT11Result
+                {
+                    Temperature = dht.Temperature.Celsius,
+                    Humidity = dht.Humidity
+                };
+            }
         }
     }
 
     public class DHT11Result
     {
-        public float temperature { get; set; }
+        public double Temperature { get; set; }
 
-        public float humidity { get; set; }
+        public double Humidity { get; set; }
     }
 }
